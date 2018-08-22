@@ -1,0 +1,25 @@
+{
+  "name": "spreadinator",
+  "version": "1.0.0",
+  "description": "slack bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karlma91/spreadinator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karlma91/spreadinator/issues"
+  },
+  "homepage": "https://github.com/karlma91/spreadinator#readme",
+  "dependencies": {
+    "@slack/client": "^4.4.0",
+    "node-env-file": "^0.1.8",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
+  }
+}
