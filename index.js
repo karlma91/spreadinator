@@ -28,25 +28,6 @@ const rtm = new RTMClient(token);
 rtm.start();
 const web = new WebClient(token);
 
-// const timeNotification = new IncomingWebhook(process.env.SLACK_WEBHOOK_URL);
-// const currentTime = new Date().toTimeString();
-
-// timeNotification.send(`The current time is ${currentTime}`, (error, resp) => {
-//   if (error) {
-//     return console.error(error);
-//   }
-
-// web.search.messages({ query: 'current in:#lunch' })
-//     .then(resp => {
-//         if (resp.messages.total > 0) {
-//             console.log('First match:', resp.messages.matches[0]);
-//         } else {
-//             console.log('No matches found');
-//         }
-//     })
-//     .catch(console.error)
-// // });
-
 // This argument can be a channel ID, a DM ID, a MPDM ID, or a group ID
 const conversationId = 'CCBU86ZJM';
 
@@ -182,11 +163,6 @@ rtm.on('message', (message) => {
                 }
             );
         }
-        web.chat.postMessage({ channel: conversationId, text: "30 minute timer started" })
-            .then((res) => {
-            })
-            .catch(console.error);
-
     }
     else if (message.text == "help") {
         commands.help(message);
@@ -195,11 +171,13 @@ rtm.on('message', (message) => {
     // Log the message
     console.log(`(channel:${message.channel}) ${message.user} says: ${message.text}`);
 });
+
 function startDoneTimer(delay) {
     setTimeout(() => {
         commands.pollDone();
     }, delay);
 }
+
 function getProductAsString(product) {
     return product.full_name + ' <' + product.front_url + '|' + product.gross_price + 'kr>'
 }
@@ -375,13 +353,4 @@ var kolonial = {
         return request(options);
     }
 }
-
 kolonial.login();
-
-// See: https://api.slack.com/methods/chat.postMessage
-// web.chat.postMessage({ channel: conversationId, text: 'Hello there from WEB-API' })
-//     .then((res) => {
-//         // `res` contains information about the posted message
-//         console.log('Message sent: ', res.ts);
-//     })
-//     .catch(console.error);
