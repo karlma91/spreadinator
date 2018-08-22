@@ -165,14 +165,13 @@ rtm.on('message', (message) => {
                                 products: selected,
                                 results: [0, 0, 0]
                             });
-                            // `res` contains information about the posted message
                             web.reactions.add({
                                 name: 'one',
                                 timestamp: res.ts,
                                 channel: conversationId
-                            }).then((res) => {
+                            }).then((res2) => {
                                 return web.reactions.add({ name: 'two', timestamp: res.ts, channel: conversationId }).then(
-                                    (res2) => {
+                                    (res3) => {
                                         return web.reactions.add({ name: 'three', timestamp: res.ts, channel: conversationId })
                                     }
                                 );
