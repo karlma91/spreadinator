@@ -18,7 +18,9 @@ var activeCategories =
         { name: 'Gulost', id: 43 },
         { name: 'Brunost', id: 151 },
         { name: 'Smøreost og prim', id: 145 },
-        { name: 'Spesialoster', id: 148 }
+        { name: 'Spesialoster', id: 148 },
+        { name: "Smør og margarin", id: 53 },
+        { name: "Ferske brød", id: 2 }
     ];
 
 var activePools = [];
@@ -65,6 +67,23 @@ web.channels.list()
         }
     });
 
+rtm.on('reaction_removed', (message) => {
+    var ts = message.item.ts;
+    if (activePools.length > 0) {
+        var pool = activePools.find(x => x.ts == ts);
+        if (pool) {
+            if (message.reaction == "one") {
+                pool.results[0]--;
+            } else if (message.reaction == "two") {
+                pool.results[1]--;
+            } else if (message.reaction == "three") {
+                pool.results[2]--;
+            }
+        }
+        console.log(activePools);
+    }
+});
+
 rtm.on('reaction_added', (message) => {
     var ts = message.item.ts;
     if (activePools.length > 0) {
@@ -109,7 +128,6 @@ rtm.on('message', (message) => {
             .catch(console.error);
     } else if (message.text.startsWith("needfood")) {
         var splitted = message.text.split(" ");
-        startDoneTimer(30 * 60 * 1000);
         var neededFood = [];
         activePools = [];
         for (var i = 1; i < splitted.length; i++) {
@@ -148,9 +166,18 @@ rtm.on('message', (message) => {
                                 results: [0, 0, 0]
                             });
                             // `res` contains information about the posted message
-                            web.reactions.add({ name: 'one', timestamp: res.ts, channel: conversationId });
-                            web.reactions.add({ name: 'two', timestamp: res.ts, channel: conversationId });
-                            web.reactions.add({ name: 'three', timestamp: res.ts, channel: conversationId });
+                            web.reactions.add({
+                                name: 'one',
+                                timestamp: res.ts,
+                                channel: conversationId
+                            }).then((res) => {
+                                return web.reactions.add({ name: 'two', timestamp: res.ts, channel: conversationId }).then(
+                                    (res2) => {
+                                        return web.reactions.add({ name: 'three', timestamp: res.ts, channel: conversationId })
+                                    }
+                                );
+                            }
+                            );
                         })
                         .catch(console.error);
                 }
